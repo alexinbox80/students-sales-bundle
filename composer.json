@@ -1,0 +1,26 @@
+{
+    "name": "alexinbox80/students-sales-bundle",
+    "version": "0.0.1",
+    "type": "symfony-bundle",
+    "description": "Bundle for sales in students project",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "alexinbox80\\StudentsSalesBundle\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "alexinbox80\\StudentsSalesBundle\\Tests\\": "tests/"
+        }
+    },
+    "authors": [
+        {
+            "name": "AlekseySerov",
+            "email": "alexinbox80@inbox.ru"
+        }
+    ],
+    "require": {
+        "php": ">=8.3"
+    }
+}

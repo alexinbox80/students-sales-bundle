@@ -1,0 +1,38 @@
+services:
+    # default configuration for services in *this* file
+    _defaults:
+        autowire: true      # Automatically injects dependencies in your services.
+        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+
+    alexinbox80\StudentsSalesBundle\Presentation\Contract\Sales: ~
+    alexinbox80\StudentsSalesBundle\Presentation\Contract\SalesInterface: '@alexinbox80\StudentsSalesBundle\Presentation\Contract\Sales'
+
+    # makes classes in src/ available to be used as services
+    # this creates a service per class whose id is the fully-qualified class name
+    alexinbox80\StudentsSalesBundle\Domain\UseCases\:
+        resource: '../src/Domain/UseCases'
+        exclude:
+            - '../src/Domain/UseCases/**/*Command'
+            - '../src/Domain/UseCases/**/*Query'
+            - '../src/Domain/UseCases/**/*Result'
+
+    alexinbox80\StudentsSalesBundle\Tests\Mocks\Repositories\InMemoryInvoicesRepository: ~
+    alexinbox80\StudentsSalesBundle\Tests\Mocks\Repositories\InMemoryProductsRepository: ~
+    alexinbox80\StudentsSalesBundle\Tests\Mocks\Repositories\InMemorySubscriptionsRepository: ~
+
+    alexinbox80\StudentsSalesBundle\Domain\Repositories\InvoicesRepositoryInterface: '@alexinbox80\StudentsSalesBundle\Tests\Mocks\Repositories\InMemoryInvoicesRepository'
+    alexinbox80\StudentsSalesBundle\Domain\Repositories\ProductsRepositoryInterface: '@alexinbox80\StudentsSalesBundle\Tests\Mocks\Repositories\InMemoryProductsRepository'
+    alexinbox80\StudentsSalesBundle\Domain\Repositories\SubscriptionsRepositoryInterface: '@alexinbox80\StudentsSalesBundle\Tests\Mocks\Repositories\InMemorySubscriptionsRepository'
+
+    alexinbox80\Shared\Tests\Mocks\FlusherSpy: ~
+    alexinbox80\Shared\Domain\FlusherInterface: '@alexinbox80\Shared\Tests\Mocks\FlusherSpy'
+
+    alexinbox80\Shared\Tests\Mocks\EventDispatcherSpy:
+        arguments:
+            $realEventDispatcher: null
+    alexinbox80\Shared\Domain\EventDispatcherInterface: '@alexinbox80\Shared\Tests\Mocks\EventDispatcherSpy'
+
+    alexinbox80\StudentsSalesBundle\Infrastructure\PaymentGateway: ~
+    alexinbox80\StudentsSalesBundle\Domain\PaymentGatewayInterface: '@alexinbox80\StudentsSalesBundle\Infrastructure\PaymentGateway'
+
+    alexinbox80\StudentsSalesBundle\Presentation\Http\AcceptPayment: ~

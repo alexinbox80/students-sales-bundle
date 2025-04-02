@@ -11,10 +11,10 @@ use Webmozart\Assert\Assert;
 #[ORM\Embeddable]
 final class Price
 {
-    #[ORM\Column(name: 'price_amount', type: 'integer', nullable: false)]
+    #[ORM\Column(name: 'amount', type: 'integer', nullable: false)]
     private int $amount;
 
-    #[ORM\Column(name: 'price_currency', type: 'string', length: 3, nullable: false)]
+    #[ORM\Column(name: 'currency', type: 'string', length: 3, nullable: false)]
     private Currency $currency;
 
     public function __construct(int $amount, Currency $currency)

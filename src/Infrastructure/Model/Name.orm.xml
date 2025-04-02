@@ -1,0 +1,11 @@
+<doctrine-mapping
+        xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                        https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd"
+>
+    <embeddable name="alexinbox80\Shared\Domain\Model\Name">
+        <field name="first" type="string" nullable="false" length="255"/>
+        <field name="last" type="string" nullable="false" length="255"/>
+    </embeddable>
+</doctrine-mapping>

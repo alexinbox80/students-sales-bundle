@@ -26,11 +26,11 @@ class StudentsSalesBundle extends AbstractBundle
             [
                 'orm' => [
                     'mappings' => [
-                        'alexinbox80\\StudentsSalesBundle' => [
+                        'alexinbox80\StudentsSalesBundle' => [
                             'type' => 'attribute',
                             'dir' => '%kernel.project_dir%/studentsSalesBundle/src/Domain/Model',
                             'prefix' => 'alexinbox80\StudentsSalesBundle\Domain\Model',
-                            'alias' => 'alexinbox80\\StudentsSalesBundle'
+                            'alias' => 'alexinbox80\StudentsSalesBundle'
                         ]
                     ]
                 ]

@@ -16,9 +16,25 @@ class StudentsSalesBundle extends AbstractBundle
 
     public function configure(DefinitionConfigurator $definition): void
     {
+
     }
 
     public function prependExtension(ContainerConfigurator $container, ContainerBuilder $builder): void
     {
+        $builder->prependExtensionConfig(
+            'doctrine',
+            [
+                'orm' => [
+                    'mappings' => [
+                        'alexinbox80\\StudentsSalesBundle' => [
+                            'type' => 'attribute',
+                            'dir' => '%kernel.project_dir%/studentsSalesBundle/src/Domain/Model',
+                            'prefix' => 'alexinbox80\StudentsSalesBundle\Domain\Model',
+                            'alias' => 'alexinbox80\\StudentsSalesBundle'
+                        ]
+                    ]
+                ]
+            ]
+        );
     }
 }

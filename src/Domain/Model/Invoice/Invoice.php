@@ -10,6 +10,9 @@ use alexinbox80\Shared\Domain\Events\EventsTrait;
 use alexinbox80\Shared\Domain\Model\AggregateRootInterface;
 use alexinbox80\Shared\Domain\Model\OId;
 use DateTimeImmutable;
+use Doctrine\ORM\Mapping as ORM;
+use alexinbox80\StudentsSalesBundle\Domain\Model\Traits\UpdatedAtTrait;
+use alexinbox80\StudentsSalesBundle\Domain\Model\Traits\DeletedAtTrait;
 
 /**
  * Агрегат "Счет"
@@ -17,28 +20,76 @@ use DateTimeImmutable;
  * LineItems - его составная часть.
  * Мы не используем в примере LineItems, но здесь я добавил метод addLineItem для демонстрации.
  */
+#[ORM\Entity]
+#[ORM\Table(name: 'invoices')]
+#[ORM\HasLifecycleCallbacks]
 class Invoice implements AggregateRootInterface
 {
+    use UpdatedAtTrait, DeletedAtTrait;
     use EventsTrait;
+
+    #[ORM\Id]
+    #[ORM\Column(type: 'shared__oid', unique: true)]
+    private OId $id;
+
+    #[ORM\Column(type: 'string', enumType: Status::class)]
+    private Status $status;
+
+    #[ORM\Column(type: 'shared__oid')]
+    private OId $customerId;
+
+    #[ORM\Column(type: 'shared__oid')]
+    private OId $subscriptionId;
+
+    #[ORM\Embedded(class: Price::class)]
+    private Price $price;
+
+    #[ORM\Column(type: 'datetime_immutable')]
+    private DateTimeImmutable $dueDate;
+
+    #[ORM\Column(type: 'datetime_immutable', nullable: true)]
+    private ?DateTimeImmutable $createdAt = null;
+
+    #[ORM\Column(type: 'datetime_immutable', nullable: true)]
+    private ?DateTimeImmutable $paidAt = null;
+
+    #[ORM\Column(type: 'datetime_immutable', nullable: true)]
+    private ?DateTimeImmutable $expiredAt = null;
+
+    #[ORM\Column(type: 'string', length:255, nullable: true)]
+    private ?string $transactionId = null;
+
+    #[ORM\Column(type: 'json', length: 1024)]
+    private ?array $items = [];
 
     /**
      * @param LineItem[] $items
      */
     public function __construct(
-        private OId $id,
-        private Status $status,
-        private OId $customerId,
-        private OId $subscriptionId,
-        private Price $price,
-        private DateTimeImmutable $dueDate,
-        private ?DateTimeImmutable $createdAt = null,
-        private ?DateTimeImmutable $paidAt = null,
-        private ?DateTimeImmutable $expiredAt = null,
-        private ?string $transactionId = null,
-        private ?array $items = [],
+        OId $id,
+        Status $status,
+        OId $customerId,
+        OId $subscriptionId,
+        Price $price,
+        DateTimeImmutable $dueDate,
+        ?DateTimeImmutable $createdAt = null,
+        ?DateTimeImmutable $paidAt = null,
+        ?DateTimeImmutable $expiredAt = null,
+        ?string $transactionId = null,
+        ?array $items = [],
 
     ) {
-        $this->createdAt = $this->createdAt ?? new DateTimeImmutable();
+        $this->id = $id;
+        $this->status = $status;
+        $this->customerId = $customerId;
+        $this->subscriptionId = $subscriptionId;
+        $this->price = $price;
+        $this->dueDate = $dueDate;
+        $this->createdAt = $createdAt ?? new DateTimeImmutable();
+        $this->paidAt = $paidAt ?? new DateTimeImmutable();
+        $this->expiredAt = $expiredAt ?? new DateTimeImmutable();
+        $this->transactionId = $transactionId;
+        $this->items = $items;
     }
 
     public static function create(

@@ -2,15 +2,19 @@
 
 namespace alexinbox80\StudentsSalesBundle\Domain\Model;
 
+use Doctrine\ORM\Mapping as ORM;
 use Webmozart\Assert\Assert;
 
 /**
  * Value Object моделирующий цену
  */
+#[ORM\Embeddable]
 final class Price
 {
+    #[ORM\Column(name: 'price_amount', type: 'integer', nullable: false)]
     private int $amount;
 
+    #[ORM\Column(name: 'price_currency', type: 'string', length: 3, nullable: false)]
     private Currency $currency;
 
     public function __construct(int $amount, Currency $currency)

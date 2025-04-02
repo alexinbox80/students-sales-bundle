@@ -10,7 +10,7 @@ use alexinbox80\Shared\Domain\Model\OId;
 use alexinbox80\StudentsSalesBundle\Domain\Model\Traits\CreatedAtTrait;
 use alexinbox80\StudentsSalesBundle\Domain\Model\Traits\UpdatedAtTrait;
 use alexinbox80\StudentsSalesBundle\Domain\Model\Traits\DeletedAtTrait;
-//use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Агрегат "Клиент".
@@ -24,24 +24,24 @@ use alexinbox80\StudentsSalesBundle\Domain\Model\Traits\DeletedAtTrait;
  *
  * В рамках примера мы этим не занимаемся.
  */
-//#[ORM\Entity]
-//#[ORM\Table(name: 'customers')]
-//#[ORM\HasLifecycleCallbacks]
-//#[ORM\UniqueConstraint(name: 'consumer__email__uniq', fields: ['email'], options: ['where' => '(deleted_at IS NULL)'])]
+#[ORM\Entity]
+#[ORM\Table(name: 'customers')]
+#[ORM\HasLifecycleCallbacks]
+#[ORM\UniqueConstraint(name: 'consumer__email__uniq', fields: ['email'], options: ['where' => '(deleted_at IS NULL)'])]
 class Customer implements AggregateRootInterface
 {
     use CreatedAtTrait, UpdatedAtTrait, DeletedAtTrait;
     use EventsTrait;
 
-//    #[ORM\Id]
-//    #[ORM\Column(type: 'shared__oid', unique: true)]
-    public OId $id;
+    #[ORM\Id]
+    #[ORM\Column(type: 'shared__oid', unique: true)]
+    private OId $id;
 
-//    #[ORM\Embedded(class: Name::class)]
-    public Name $name;
+    #[ORM\Embedded(class: Name::class)]
+    private Name $name;
 
-//    #[ORM\Column(type:'string', length: 255, unique: true, nullable: false)]
-    public Email $email;
+    #[ORM\Column(type:'string', length: 255, unique: true, nullable: false)]
+    private Email $email;
 
     public function __construct(
         OId $id,

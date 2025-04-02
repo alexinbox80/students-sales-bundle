@@ -16,6 +16,10 @@ use alexinbox80\Shared\Domain\Model\AggregateRootInterface;
 use alexinbox80\Shared\Domain\Model\OId;
 use DateTimeImmutable;
 use DomainException;
+use Doctrine\ORM\Mapping as ORM;
+use alexinbox80\StudentsSalesBundle\Domain\Model\Traits\CreatedAtTrait;
+use alexinbox80\StudentsSalesBundle\Domain\Model\Traits\UpdatedAtTrait;
+use alexinbox80\StudentsSalesBundle\Domain\Model\Traits\DeletedAtTrait;
 
 /**
  * Агрегат "Подписка".
@@ -23,19 +27,52 @@ use DomainException;
  * Обратите внимание, что все ссылки на другие агрегаты - это их идентификаторы, а не объекты.
  * У этого агрегата есть методы мутаторы с бизнес логикой.
  */
+#[ORM\Entity]
+#[ORM\Table(name: 'subscriptions')]
+#[ORM\HasLifecycleCallbacks]
 class Subscription implements AggregateRootInterface
 {
+    use CreatedAtTrait, UpdatedAtTrait, DeletedAtTrait;
     use EventsTrait;
 
+    #[ORM\Id]
+    #[ORM\Column(type: 'shared__oid', unique: true)]
+    private OId $id;
+
+    #[ORM\Column(type: 'shared__oid')]
+    private OId $customerId;
+
+    #[ORM\Column(type: 'shared__oid')]
+    private OId $productId;
+
+    #[ORM\Embedded(class: Price::class)]
+    private Price $price;
+
+    #[ORM\Column(type: 'string', enumType: Status::class)]
+    private Status $status;
+
+    #[ORM\Column(type: 'datetime_immutable')]
+    private DateTimeImmutable $startDate;
+
+    #[ORM\Column(type: 'datetime_immutable', nullable: true)]
+    private ?DateTimeImmutable $endDate = null;
+
     public function __construct(
-        private OId $id,
-        private OId $customerId,
-        private OId $productId,
-        private Price $price,
-        private Status $status,
-        private DateTimeImmutable $startDate,
-        private ?DateTimeImmutable $endDate = null
+        OId $id,
+        OId $customerId,
+        OId $productId,
+        Price $price,
+        Status $status,
+        DateTimeImmutable $startDate,
+        ?DateTimeImmutable $endDate = null
     ) {
+        $this->id = $id;
+        $this->customerId = $customerId;
+        $this->productId = $productId;
+        $this->price = $price;
+        $this->status = $status;
+        $this->startDate = $startDate;
+        $this->endDate = $endDate;
     }
 
     public static function create(

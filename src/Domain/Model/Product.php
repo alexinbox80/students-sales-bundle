@@ -6,18 +6,33 @@ use alexinbox80\Shared\Domain\Events\EventsTrait;
 use alexinbox80\Shared\Domain\Model\AggregateRootInterface;
 use alexinbox80\Shared\Domain\Model\OId;
 use Webmozart\Assert\Assert;
+use Doctrine\ORM\Mapping as ORM;
+use alexinbox80\StudentsSalesBundle\Domain\Model\Traits\CreatedAtTrait;
+use alexinbox80\StudentsSalesBundle\Domain\Model\Traits\UpdatedAtTrait;
+use alexinbox80\StudentsSalesBundle\Domain\Model\Traits\DeletedAtTrait;
 
 /**
  * Агрегат "Продукт".
  * Продукт на который подписывается пользователь.
  * Не важен в контексте примера.
  */
+#[ORM\Entity]
+#[ORM\Table(name: 'products')]
+#[ORM\HasLifecycleCallbacks]
+#[ORM\UniqueConstraint(name: 'product__name__uniq', fields: ['name'], options: ['where' => '(deleted_at IS NULL)'])]
 class Product implements AggregateRootInterface
 {
+    use CreatedAtTrait, UpdatedAtTrait, DeletedAtTrait;
     use EventsTrait;
 
+    #[ORM\Id]
+    #[ORM\Column(type: 'shared__oid', unique: true)]
     private OId $id;
+
+    #[ORM\Column(type:'string', length: 255, unique: true, nullable: false)]
     private string $name;
+
+    #[ORM\Embedded(class: Price::class)]
     private Price $price;
 
     public function __construct(OId $id, string $name, Price $price)

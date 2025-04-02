@@ -7,6 +7,10 @@ use alexinbox80\Shared\Domain\Model\AggregateRootInterface;
 use alexinbox80\Shared\Domain\Model\Email;
 use alexinbox80\Shared\Domain\Model\Name;
 use alexinbox80\Shared\Domain\Model\OId;
+use alexinbox80\StudentsSalesBundle\Domain\Model\Traits\CreatedAtTrait;
+use alexinbox80\StudentsSalesBundle\Domain\Model\Traits\UpdatedAtTrait;
+use alexinbox80\StudentsSalesBundle\Domain\Model\Traits\DeletedAtTrait;
+//use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Агрегат "Клиент".
@@ -20,12 +24,23 @@ use alexinbox80\Shared\Domain\Model\OId;
  *
  * В рамках примера мы этим не занимаемся.
  */
+//#[ORM\Entity]
+//#[ORM\Table(name: 'customers')]
+//#[ORM\HasLifecycleCallbacks]
+//#[ORM\UniqueConstraint(name: 'consumer__email__uniq', fields: ['email'], options: ['where' => '(deleted_at IS NULL)'])]
 class Customer implements AggregateRootInterface
 {
+    use CreatedAtTrait, UpdatedAtTrait, DeletedAtTrait;
     use EventsTrait;
 
+//    #[ORM\Id]
+//    #[ORM\Column(type: 'shared__oid', unique: true)]
     public OId $id;
+
+//    #[ORM\Embedded(class: Name::class)]
     public Name $name;
+
+//    #[ORM\Column(type:'string', length: 255, unique: true, nullable: false)]
     public Email $email;
 
     public function __construct(

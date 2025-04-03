@@ -10,6 +10,7 @@ use alexinbox80\StudentsSalesBundle\Domain\Events\SubscriptionRenewedEvent;
 use alexinbox80\StudentsSalesBundle\Domain\Exceptions\SubscriptionIsNotActiveException;
 use alexinbox80\StudentsSalesBundle\Domain\Exceptions\SubscriptionIsNotPendingException;
 use alexinbox80\StudentsSalesBundle\Domain\Exceptions\SubscriptionIsNotReadyForRenewalException;
+use alexinbox80\StudentsSalesBundle\Domain\Model\ModelInterface;
 use alexinbox80\StudentsSalesBundle\Domain\Model\Price;
 use alexinbox80\Shared\Domain\Events\EventsTrait;
 use alexinbox80\Shared\Domain\Model\AggregateRootInterface;
@@ -30,7 +31,7 @@ use alexinbox80\StudentsSalesBundle\Domain\Model\Traits\DeletedAtTrait;
 #[ORM\Entity]
 #[ORM\Table(name: 'subscriptions')]
 #[ORM\HasLifecycleCallbacks]
-class Subscription implements AggregateRootInterface
+class Subscription implements AggregateRootInterface, ModelInterface
 {
     use CreatedAtTrait, UpdatedAtTrait, DeletedAtTrait;
     use EventsTrait;
@@ -45,7 +46,7 @@ class Subscription implements AggregateRootInterface
     #[ORM\Column(type: 'shared__oid')]
     private OId $productId;
 
-    #[ORM\Embedded(class: Price::class)]
+    #[ORM\Embedded(class: Price::class, columnPrefix: false)]
     private Price $price;
 
     #[ORM\Column(type: 'string', enumType: Status::class)]

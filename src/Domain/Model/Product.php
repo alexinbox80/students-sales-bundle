@@ -32,7 +32,7 @@ class Product implements AggregateRootInterface
     #[ORM\Column(type:'string', length: 255, unique: true, nullable: false)]
     private string $name;
 
-    #[ORM\Embedded(class: Price::class)]
+    #[ORM\Embedded(class: Price::class, columnPrefix: false)]
     private Price $price;
 
     public function __construct(OId $id, string $name, Price $price)

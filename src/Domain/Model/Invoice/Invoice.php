@@ -41,7 +41,7 @@ class Invoice implements AggregateRootInterface
     #[ORM\Column(type: 'shared__oid')]
     private OId $subscriptionId;
 
-    #[ORM\Embedded(class: Price::class)]
+    #[ORM\Embedded(class: Price::class, columnPrefix: false)]
     private Price $price;
 
     #[ORM\Column(type: 'datetime_immutable')]

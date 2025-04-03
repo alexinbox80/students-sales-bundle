@@ -38,6 +38,11 @@ final class Price
     public function isEqual(self $other): bool
     {
         return $this->amount === $other->amount
-            && $this->currency === $other->currency;
+            && $this->currency->value === $other->currency->value;
+    }
+
+    public function __toString(): string
+    {
+        return $this->amount . ' ' . $this->currency->value;
     }
 }

@@ -25,7 +25,7 @@ abstract class AbstractRepository
     /**
      * @param T $entity
      */
-    protected function store(ModelInterface $entity): int
+    protected function store(ModelInterface $entity): string
     {
         $this->entityManager->persist($entity);
         $this->flush();

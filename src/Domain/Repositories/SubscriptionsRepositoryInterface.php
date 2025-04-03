@@ -16,5 +16,6 @@ interface SubscriptionsRepositoryInterface
     public function find(OId $id): ?Subscription;
 
     public function add(Subscription $subscription): void;
+
     public function hasActiveSubscription(OId $customerId): bool;
 }

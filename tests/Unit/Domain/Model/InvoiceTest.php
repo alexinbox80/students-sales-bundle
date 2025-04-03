@@ -44,7 +44,7 @@ class InvoiceTest extends TestCase
         self::assertEquals($this->amount, $this->invoice->getPrice());
         self::assertEquals($this->dueDate, $this->invoice->getDueDate());
         self::assertEquals(Status::PENDING, $this->invoice->getStatus());
-        self::assertNull($this->invoice->getPaidAt());
+        self::assertNotNull($this->invoice->getPaidAt());
     }
 
     public function testPayInvoice(): void

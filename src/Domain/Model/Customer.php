@@ -37,7 +37,7 @@ class Customer implements AggregateRootInterface
     #[ORM\Column(type: 'shared__oid', unique: true)]
     private OId $id;
 
-    #[ORM\Embedded(class: Name::class)]
+    #[ORM\Embedded(class: Name::class, columnPrefix: false)]
     private Name $name;
 
     #[ORM\Column(type:'string', length: 255, unique: true, nullable: false)]

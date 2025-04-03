@@ -7,9 +7,10 @@ use alexinbox80\Shared\Domain\Model\AggregateRootInterface;
 use alexinbox80\Shared\Domain\Model\Email;
 use alexinbox80\Shared\Domain\Model\Name;
 use alexinbox80\Shared\Domain\Model\OId;
+use alexinbox80\StudentsSalesBundle\Domain\Model\Interfaces\ModelInterface;
 use alexinbox80\StudentsSalesBundle\Domain\Model\Traits\CreatedAtTrait;
-use alexinbox80\StudentsSalesBundle\Domain\Model\Traits\UpdatedAtTrait;
 use alexinbox80\StudentsSalesBundle\Domain\Model\Traits\DeletedAtTrait;
+use alexinbox80\StudentsSalesBundle\Domain\Model\Traits\UpdatedAtTrait;
 use Doctrine\ORM\Mapping as ORM;
 
 /**

@@ -5,11 +5,12 @@ namespace alexinbox80\StudentsSalesBundle\Domain\Model;
 use alexinbox80\Shared\Domain\Events\EventsTrait;
 use alexinbox80\Shared\Domain\Model\AggregateRootInterface;
 use alexinbox80\Shared\Domain\Model\OId;
-use Webmozart\Assert\Assert;
-use Doctrine\ORM\Mapping as ORM;
+use alexinbox80\StudentsSalesBundle\Domain\Model\Interfaces\ModelInterface;
 use alexinbox80\StudentsSalesBundle\Domain\Model\Traits\CreatedAtTrait;
-use alexinbox80\StudentsSalesBundle\Domain\Model\Traits\UpdatedAtTrait;
 use alexinbox80\StudentsSalesBundle\Domain\Model\Traits\DeletedAtTrait;
+use alexinbox80\StudentsSalesBundle\Domain\Model\Traits\UpdatedAtTrait;
+use Doctrine\ORM\Mapping as ORM;
+use Webmozart\Assert\Assert;
 
 /**
  * Агрегат "Продукт".

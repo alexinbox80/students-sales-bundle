@@ -2,7 +2,7 @@
 
 namespace alexinbox80\StudentsSalesBundle\Infrastructure\Repository;
 
-use alexinbox80\StudentsSalesBundle\Domain\Model\ModelInterface;
+use alexinbox80\StudentsSalesBundle\Domain\Model\Interfaces\ModelInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Exception\ORMException;
 use Throwable;

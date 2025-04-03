@@ -2,6 +2,9 @@
 
 namespace alexinbox80\StudentsSalesBundle\Domain\Model\Subscription;
 
+use alexinbox80\Shared\Domain\Events\EventsTrait;
+use alexinbox80\Shared\Domain\Model\AggregateRootInterface;
+use alexinbox80\Shared\Domain\Model\OId;
 use alexinbox80\StudentsSalesBundle\Domain\Events\SubscriptionActivatedEvent;
 use alexinbox80\StudentsSalesBundle\Domain\Events\SubscriptionCancelledEvent;
 use alexinbox80\StudentsSalesBundle\Domain\Events\SubscriptionCreatedEvent;
@@ -10,17 +13,16 @@ use alexinbox80\StudentsSalesBundle\Domain\Events\SubscriptionRenewedEvent;
 use alexinbox80\StudentsSalesBundle\Domain\Exceptions\SubscriptionIsNotActiveException;
 use alexinbox80\StudentsSalesBundle\Domain\Exceptions\SubscriptionIsNotPendingException;
 use alexinbox80\StudentsSalesBundle\Domain\Exceptions\SubscriptionIsNotReadyForRenewalException;
-use alexinbox80\StudentsSalesBundle\Domain\Model\ModelInterface;
+use alexinbox80\StudentsSalesBundle\Domain\Model\Interfaces\ModelInterface;
+use alexinbox80\StudentsSalesBundle\Domain\Model\Interfaces\SoftDeletableInterface;
+use alexinbox80\StudentsSalesBundle\Domain\Model\Interfaces\HasMetaTimestampsInterface;
 use alexinbox80\StudentsSalesBundle\Domain\Model\Price;
-use alexinbox80\Shared\Domain\Events\EventsTrait;
-use alexinbox80\Shared\Domain\Model\AggregateRootInterface;
-use alexinbox80\Shared\Domain\Model\OId;
+use alexinbox80\StudentsSalesBundle\Domain\Model\Traits\CreatedAtTrait;
+use alexinbox80\StudentsSalesBundle\Domain\Model\Traits\DeletedAtTrait;
+use alexinbox80\StudentsSalesBundle\Domain\Model\Traits\UpdatedAtTrait;
+use Doctrine\ORM\Mapping as ORM;
 use DateTimeImmutable;
 use DomainException;
-use Doctrine\ORM\Mapping as ORM;
-use alexinbox80\StudentsSalesBundle\Domain\Model\Traits\CreatedAtTrait;
-use alexinbox80\StudentsSalesBundle\Domain\Model\Traits\UpdatedAtTrait;
-use alexinbox80\StudentsSalesBundle\Domain\Model\Traits\DeletedAtTrait;
 
 /**
  * Агрегат "Подписка".
@@ -28,10 +30,10 @@ use alexinbox80\StudentsSalesBundle\Domain\Model\Traits\DeletedAtTrait;
  * Обратите внимание, что все ссылки на другие агрегаты - это их идентификаторы, а не объекты.
  * У этого агрегата есть методы мутаторы с бизнес логикой.
  */
-#[ORM\Entity]
 #[ORM\Table(name: 'subscriptions')]
+#[ORM\Entity]
 #[ORM\HasLifecycleCallbacks]
-class Subscription implements AggregateRootInterface, ModelInterface
+class Subscription implements AggregateRootInterface//, ModelInterface, HasMetaTimestampsInterface, SoftDeletableInterface
 {
     use CreatedAtTrait, UpdatedAtTrait, DeletedAtTrait;
     use EventsTrait;

@@ -2,18 +2,18 @@
 
 namespace alexinbox80\StudentsSalesBundle\Domain\Model\Invoice;
 
-use alexinbox80\StudentsSalesBundle\Domain\Events\InvoiceExpiredEvent;
-use alexinbox80\StudentsSalesBundle\Domain\Events\InvoicePaidEvent;
-use alexinbox80\StudentsSalesBundle\Domain\Exceptions\InvoiceIsNotAwaitingPaymentException;
-use alexinbox80\StudentsSalesBundle\Domain\Model\ModelInterface;
-use alexinbox80\StudentsSalesBundle\Domain\Model\Price;
 use alexinbox80\Shared\Domain\Events\EventsTrait;
 use alexinbox80\Shared\Domain\Model\AggregateRootInterface;
 use alexinbox80\Shared\Domain\Model\OId;
+use alexinbox80\StudentsSalesBundle\Domain\Events\InvoiceExpiredEvent;
+use alexinbox80\StudentsSalesBundle\Domain\Events\InvoicePaidEvent;
+use alexinbox80\StudentsSalesBundle\Domain\Exceptions\InvoiceIsNotAwaitingPaymentException;
+use alexinbox80\StudentsSalesBundle\Domain\Model\Interfaces\ModelInterface;
+use alexinbox80\StudentsSalesBundle\Domain\Model\Price;
+use alexinbox80\StudentsSalesBundle\Domain\Model\Traits\DeletedAtTrait;
+use alexinbox80\StudentsSalesBundle\Domain\Model\Traits\UpdatedAtTrait;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
-use alexinbox80\StudentsSalesBundle\Domain\Model\Traits\UpdatedAtTrait;
-use alexinbox80\StudentsSalesBundle\Domain\Model\Traits\DeletedAtTrait;
 
 /**
  * Агрегат "Счет"

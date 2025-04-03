@@ -1,6 +1,6 @@
 <?php
 
-namespace alexinbox80\StudentsSalesBundle\Domain\Model;
+namespace alexinbox80\StudentsSalesBundle\Domain\Model\Interfaces;
 
 use alexinbox80\Shared\Domain\Model\OId;
 

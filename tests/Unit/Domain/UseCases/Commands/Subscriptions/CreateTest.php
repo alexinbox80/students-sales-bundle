@@ -15,6 +15,7 @@ use alexinbox80\Shared\Domain\FlusherInterface;
 use alexinbox80\Shared\Domain\Model\OId;
 use alexinbox80\Shared\Tests\Mocks\EventDispatcherSpy;
 use DateTimeImmutable;
+use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
@@ -25,6 +26,7 @@ final class CreateTest extends TestCase
     private InMemorySubscriptionsRepository $subscriptionsRepository;
     private InMemoryProductsRepository $productsRepository;
     private FlusherInterface $flusher;
+    private EntityManagerInterface $entityManager;
     private EventDispatcherSpy $dispatcher;
 
     protected function setUp(): void
@@ -33,12 +35,14 @@ final class CreateTest extends TestCase
         $this->productsRepository = new InMemoryProductsRepository();
         $this->flusher = $this->createMock(FlusherInterface::class);
         $this->dispatcher = new EventDispatcherSpy();
+        $this->entityManager = $this->createMock(EntityManagerInterface::class);
 
         $this->handler = new Handler(
             $this->subscriptionsRepository,
             $this->productsRepository,
             $this->flusher,
-            $this->dispatcher
+            $this->dispatcher,
+            $this->entityManager
         );
     }
 
@@ -55,6 +59,10 @@ final class CreateTest extends TestCase
         );
 
         $this->flusher
+            ->expects($this->once())
+            ->method('flush');
+
+        $this->entityManager
             ->expects($this->once())
             ->method('flush');
 

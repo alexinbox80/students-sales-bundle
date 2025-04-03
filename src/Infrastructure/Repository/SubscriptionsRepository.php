@@ -35,7 +35,6 @@ class SubscriptionsRepository extends AbstractRepository implements Subscription
 
     public function add(Subscription $subscription): void
     {
-        dump($subscription);
         $this->store($subscription);
     }
 

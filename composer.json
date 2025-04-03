@@ -21,9 +21,6 @@
         }
     ],
     "require": {
-        "php": ">=8.3",
-        "doctrine/doctrine-bundle": "^2.14",
-        "doctrine/doctrine-migrations-bundle": "^3.4",
-        "doctrine/orm": "^3.3"
+        "php": ">=8.3"
     }
 }

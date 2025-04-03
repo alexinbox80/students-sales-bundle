@@ -2,6 +2,7 @@
 
 namespace alexinbox80\StudentsSalesBundle\Domain\Model;
 
+use alexinbox80\StudentsSalesBundle\Domain\Model\Subscription\Status;
 use Doctrine\ORM\Mapping as ORM;
 use Webmozart\Assert\Assert;
 
@@ -14,7 +15,7 @@ final class Price
     #[ORM\Column(name: 'amount', type: 'integer', nullable: false)]
     private int $amount;
 
-    #[ORM\Column(name: 'currency', type: 'string', length: 3, nullable: false)]
+    #[ORM\Column(name: 'currency', length: 3, nullable: false, enumType: Currency::class)]
     private Currency $currency;
 
     public function __construct(int $amount, Currency $currency)

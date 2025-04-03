@@ -28,7 +28,7 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Table(name: 'customers')]
 #[ORM\HasLifecycleCallbacks]
 #[ORM\UniqueConstraint(name: 'consumer__email__uniq', fields: ['email'], options: ['where' => '(deleted_at IS NULL)'])]
-class Customer implements AggregateRootInterface
+class Customer implements AggregateRootInterface, ModelInterface
 {
     use CreatedAtTrait, UpdatedAtTrait, DeletedAtTrait;
     use EventsTrait;

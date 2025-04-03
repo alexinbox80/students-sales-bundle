@@ -5,6 +5,7 @@ namespace alexinbox80\StudentsSalesBundle\Domain\Model\Invoice;
 use alexinbox80\StudentsSalesBundle\Domain\Events\InvoiceExpiredEvent;
 use alexinbox80\StudentsSalesBundle\Domain\Events\InvoicePaidEvent;
 use alexinbox80\StudentsSalesBundle\Domain\Exceptions\InvoiceIsNotAwaitingPaymentException;
+use alexinbox80\StudentsSalesBundle\Domain\Model\ModelInterface;
 use alexinbox80\StudentsSalesBundle\Domain\Model\Price;
 use alexinbox80\Shared\Domain\Events\EventsTrait;
 use alexinbox80\Shared\Domain\Model\AggregateRootInterface;
@@ -23,7 +24,7 @@ use alexinbox80\StudentsSalesBundle\Domain\Model\Traits\DeletedAtTrait;
 #[ORM\Entity]
 #[ORM\Table(name: 'invoices')]
 #[ORM\HasLifecycleCallbacks]
-class Invoice implements AggregateRootInterface
+class Invoice implements AggregateRootInterface, ModelInterface
 {
     use UpdatedAtTrait, DeletedAtTrait;
     use EventsTrait;

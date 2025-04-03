@@ -20,7 +20,7 @@ use alexinbox80\StudentsSalesBundle\Domain\Model\Traits\DeletedAtTrait;
 #[ORM\Table(name: 'products')]
 #[ORM\HasLifecycleCallbacks]
 #[ORM\UniqueConstraint(name: 'product__name__uniq', fields: ['name'], options: ['where' => '(deleted_at IS NULL)'])]
-class Product implements AggregateRootInterface
+class Product implements AggregateRootInterface, ModelInterface
 {
     use CreatedAtTrait, UpdatedAtTrait, DeletedAtTrait;
     use EventsTrait;

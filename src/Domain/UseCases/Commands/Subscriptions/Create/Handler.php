@@ -7,7 +7,6 @@ use alexinbox80\StudentsSalesBundle\Domain\Repositories\ProductsRepositoryInterf
 use alexinbox80\StudentsSalesBundle\Domain\Repositories\SubscriptionsRepositoryInterface;
 use alexinbox80\Shared\Domain\EventDispatcherInterface;
 use alexinbox80\Shared\Domain\FlusherInterface;
-use Doctrine\ORM\EntityManagerInterface;
 
 final class Handler
 {
@@ -15,8 +14,7 @@ final class Handler
         private readonly SubscriptionsRepositoryInterface $subscriptions,
         private readonly ProductsRepositoryInterface $productsRepository,
         private readonly FlusherInterface $flusher,
-        private readonly EventDispatcherInterface $dispatcher,
-        protected readonly EntityManagerInterface $entityManager,
+        private readonly EventDispatcherInterface $dispatcher
     ) {
     }
 
@@ -40,10 +38,7 @@ final class Handler
             $endDate
         );
 
-        //$this->subscriptions->add($subscription);
-
-        $this->entityManager->persist($subscription);
-        $this->entityManager->flush();
+        $this->subscriptions->add($subscription);
         //$this->flusher->flush();
 
         $this->dispatcher->dispatch(...$subscription->releaseEvents());

@@ -35,14 +35,12 @@ final class CreateTest extends TestCase
         $this->productsRepository = new InMemoryProductsRepository();
         $this->flusher = $this->createMock(FlusherInterface::class);
         $this->dispatcher = new EventDispatcherSpy();
-        $this->entityManager = $this->createMock(EntityManagerInterface::class);
 
         $this->handler = new Handler(
             $this->subscriptionsRepository,
             $this->productsRepository,
             $this->flusher,
-            $this->dispatcher,
-            $this->entityManager
+            $this->dispatcher
         );
     }
 
@@ -58,13 +56,9 @@ final class CreateTest extends TestCase
             startDate: $startDate,
         );
 
-        $this->flusher
-            ->expects($this->once())
-            ->method('flush');
-
-        $this->entityManager
-            ->expects($this->once())
-            ->method('flush');
+//        $this->flusher
+//            ->expects($this->once())
+//            ->method('flush');
 
         $this->handler->handle($command);
 

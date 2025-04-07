@@ -10,6 +10,7 @@ use alexinbox80\Shared\Domain\Model\OId;
 use InvalidArgumentException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Attribute\Route;
 use Webmozart\Assert\Assert;
@@ -25,7 +26,11 @@ class AcceptPayment
     ) {
     }
 
-    #[Route('/api/sales/webhooks/invoices/pay', methods: ['POST'])]
+    #[Route(
+        path: '/api/sales/webhooks/invoices/pay',
+        name: 'sales_webhooks_invoices_pay',
+        methods: ['POST']
+    )]
     public function __invoke(Request $request): JsonResponse
     {
         $requestData = $request->toArray();
@@ -37,7 +42,7 @@ class AcceptPayment
             Assert::stringNotEmpty($invoiceId);
             Assert::stringNotEmpty($transactionId);
         } catch (InvalidArgumentException $e) {
-            return new JsonResponse(['error' => $e->getMessage()], 400);
+            return new JsonResponse(['error' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
         }
 
         try {
@@ -49,8 +54,8 @@ class AcceptPayment
             );
 
             return new JsonResponse();
-        } catch (NotFoundException|InvoiceIsNotAwaitingPaymentException $e) {
-            return new JsonResponse(['error' => $e->getMessage()], 400);
+        } catch (NotFoundException | InvoiceIsNotAwaitingPaymentException $e) {
+            return new JsonResponse(['error' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
         }
     }
 }

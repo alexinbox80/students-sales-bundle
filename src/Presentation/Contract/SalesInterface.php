@@ -23,4 +23,14 @@ interface SalesInterface
     ): string;
 
     public function generatePaymentLink(string $subscriptionId): string;
+
+    /**
+     * @return string Customer id
+     */
+    public function customer(
+        string $studentId,
+        string $firstName,
+        string $lastName,
+        string $email,
+    ): string;
 }

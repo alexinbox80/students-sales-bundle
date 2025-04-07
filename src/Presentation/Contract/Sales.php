@@ -2,8 +2,12 @@
 
 namespace alexinbox80\StudentsSalesBundle\Presentation\Contract;
 
+use alexinbox80\Shared\Domain\Model\Email;
+use alexinbox80\Shared\Domain\Model\Name;
 use alexinbox80\StudentsSalesBundle\Domain\UseCases\Commands\Subscriptions\Create\Command as CreateSubscriptionCommand;
 use alexinbox80\StudentsSalesBundle\Domain\UseCases\Commands\Subscriptions\Create\Handler as CreateSubscriptionHandler;
+use alexinbox80\StudentsSalesBundle\Domain\UseCases\Commands\Customers\Create\Command as CreateCustomerCommand;
+use alexinbox80\StudentsSalesBundle\Domain\UseCases\Commands\Customers\Create\Handler as CreateCustomerHandler;
 use alexinbox80\StudentsSalesBundle\Domain\UseCases\Queries\Invoices\GeneratePaymentLink\Fetcher as GeneratePaymentLinkFetcher;
 use alexinbox80\StudentsSalesBundle\Domain\UseCases\Queries\Invoices\GeneratePaymentLink\Query as GeneratePaymentLinkQuery;
 use DateTimeImmutable;
@@ -65,11 +69,36 @@ final readonly class Sales implements SalesInterface, ServiceSubscriberInterface
         }
     }
 
+    public function customer(
+        string $studentId,
+        string $firstName,
+        string $lastName,
+        string $email,
+    ): string
+    {
+        $command = new CreateCustomerCommand(
+            customerId: OId::fromString($studentId),
+            name: new Name($firstName, $lastName),
+            email: new Email($email)
+        );
+
+        $handler = $this->service(CreateCustomerHandler::class);
+
+        try {
+            $customerId = $handler->handle($command);
+        } catch (Throwable $e) {
+            // TODO Convert exception to contract
+            throw $e;
+        }
+
+        return $customerId;
+    }
     public static function getSubscribedServices(): array
     {
         return [
             CreateSubscriptionHandler::class => CreateSubscriptionHandler::class,
             GeneratePaymentLinkFetcher::class => GeneratePaymentLinkFetcher::class,
+            CreateCustomerHandler::class => CreateCustomerHandler::class,
         ];
     }
 

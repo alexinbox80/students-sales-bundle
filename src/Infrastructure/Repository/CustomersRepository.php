@@ -34,6 +34,6 @@ class CustomersRepository extends AbstractRepository implements CustomersReposit
 
     public function add(Customer $customer): void
     {
-
+        $this->store($customer);
     }
 }

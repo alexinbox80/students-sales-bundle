@@ -33,9 +33,9 @@ use DomainException;
 #[ORM\Table(name: 'subscriptions')]
 #[ORM\Entity]
 #[ORM\HasLifecycleCallbacks]
-class Subscription implements AggregateRootInterface, ModelInterface//, HasMetaTimestampsInterface, SoftDeletableInterface
+class Subscription implements AggregateRootInterface, ModelInterface, HasMetaTimestampsInterface, SoftDeletableInterface
 {
-    use CreatedAtTrait, UpdatedAtTrait;//, DeletedAtTrait;
+    use CreatedAtTrait, UpdatedAtTrait, DeletedAtTrait;
     use EventsTrait;
 
     #[ORM\Id]

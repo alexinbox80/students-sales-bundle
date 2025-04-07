@@ -5,7 +5,9 @@ namespace alexinbox80\StudentsSalesBundle\Domain\Model;
 use alexinbox80\Shared\Domain\Events\EventsTrait;
 use alexinbox80\Shared\Domain\Model\AggregateRootInterface;
 use alexinbox80\Shared\Domain\Model\OId;
+use alexinbox80\StudentsSalesBundle\Domain\Model\Interfaces\HasMetaTimestampsInterface;
 use alexinbox80\StudentsSalesBundle\Domain\Model\Interfaces\ModelInterface;
+use alexinbox80\StudentsSalesBundle\Domain\Model\Interfaces\SoftDeletableInterface;
 use alexinbox80\StudentsSalesBundle\Domain\Model\Traits\CreatedAtTrait;
 use alexinbox80\StudentsSalesBundle\Domain\Model\Traits\DeletedAtTrait;
 use alexinbox80\StudentsSalesBundle\Domain\Model\Traits\UpdatedAtTrait;
@@ -21,7 +23,7 @@ use Webmozart\Assert\Assert;
 #[ORM\Table(name: 'products')]
 #[ORM\HasLifecycleCallbacks]
 #[ORM\UniqueConstraint(name: 'product__name__uniq', fields: ['name'], options: ['where' => '(deleted_at IS NULL)'])]
-class Product implements AggregateRootInterface, ModelInterface
+class Product implements AggregateRootInterface, ModelInterface, HasMetaTimestampsInterface, SoftDeletableInterface
 {
     use CreatedAtTrait, UpdatedAtTrait, DeletedAtTrait;
     use EventsTrait;

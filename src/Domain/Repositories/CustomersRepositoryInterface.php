@@ -11,9 +11,13 @@ interface CustomersRepositoryInterface
     /**
      * @throws NotFoundException
      */
-    public function get(OId $id): Customer;
+    public function get(OId $id): ?Customer;
 
     public function find(OId $id): ?Customer;
 
     public function add(Customer $customer): void;
+
+    public function update(): void;
+
+    public function remove(Customer $customer): void;
 }

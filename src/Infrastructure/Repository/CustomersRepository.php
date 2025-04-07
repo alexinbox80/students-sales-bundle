@@ -18,13 +18,14 @@ class CustomersRepository extends AbstractRepository implements CustomersReposit
         parent::__construct($entityManager);
     }
 
-    public function get(OId $id): Customer
+    public function get(OId $id): ?Customer
     {
         $repository = $this->entityManager->getRepository(Customer::class);
-        /** @var Customer|null $customer */
-        $customer = $repository->find($id);
 
-        return $customer;
+        /** @var Customer|null $customer */
+        $customer =  $repository->findBy(['customerOid' => $id]);
+
+        return $customer[0] ?? null;
     }
 
     public function find(OId $id): ?Customer
@@ -35,5 +36,16 @@ class CustomersRepository extends AbstractRepository implements CustomersReposit
     public function add(Customer $customer): void
     {
         $this->store($customer);
+    }
+
+    public function update(): void
+    {
+        $this->flush();
+    }
+
+    public function remove(Customer $customer): void
+    {
+        $customer->setDeletedAt();
+        $this->flush();
     }
 }

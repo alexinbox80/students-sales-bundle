@@ -8,7 +8,9 @@ use alexinbox80\Shared\Domain\Model\OId;
 use alexinbox80\StudentsSalesBundle\Domain\Events\InvoiceExpiredEvent;
 use alexinbox80\StudentsSalesBundle\Domain\Events\InvoicePaidEvent;
 use alexinbox80\StudentsSalesBundle\Domain\Exceptions\InvoiceIsNotAwaitingPaymentException;
+use alexinbox80\StudentsSalesBundle\Domain\Model\Interfaces\HasMetaTimestampsInterface;
 use alexinbox80\StudentsSalesBundle\Domain\Model\Interfaces\ModelInterface;
+use alexinbox80\StudentsSalesBundle\Domain\Model\Interfaces\SoftDeletableInterface;
 use alexinbox80\StudentsSalesBundle\Domain\Model\Price;
 use alexinbox80\StudentsSalesBundle\Domain\Model\Traits\DeletedAtTrait;
 use alexinbox80\StudentsSalesBundle\Domain\Model\Traits\UpdatedAtTrait;
@@ -24,7 +26,7 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity]
 #[ORM\Table(name: 'invoices')]
 #[ORM\HasLifecycleCallbacks]
-class Invoice implements AggregateRootInterface, ModelInterface
+class Invoice implements AggregateRootInterface, ModelInterface, HasMetaTimestampsInterface, SoftDeletableInterface
 {
     use UpdatedAtTrait, DeletedAtTrait;
     use EventsTrait;
@@ -196,5 +198,10 @@ class Invoice implements AggregateRootInterface, ModelInterface
     public function addLineItem(string $productId, int $amount, int $quantity, string $text): void
     {
         $this->items[] = new LineItem($productId, $amount, $quantity, $text);
+    }
+
+    public function setCreatedAt(): void
+    {
+        $this->createdAt = new DateTimeImmutable();
     }
 }

@@ -27,10 +27,27 @@ interface SalesInterface
     /**
      * @return string Customer id
      */
-    public function customer(
-        string $studentId,
+    public function createCustomer(
+        string $customerId,
         string $firstName,
         string $lastName,
         string $email,
+    ): string;
+
+    /**
+     * @return string Customer id
+     */
+    public function updateCustomer(
+        string $customerId,
+        string $firstName,
+        string $lastName,
+        string $email,
+    ): string;
+
+    /**
+     * @return string Customer id
+     */
+    public function deleteCustomer(
+        string $customerId
     ): string;
 }

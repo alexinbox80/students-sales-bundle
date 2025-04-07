@@ -8,6 +8,10 @@ use alexinbox80\StudentsSalesBundle\Domain\UseCases\Commands\Subscriptions\Creat
 use alexinbox80\StudentsSalesBundle\Domain\UseCases\Commands\Subscriptions\Create\Handler as CreateSubscriptionHandler;
 use alexinbox80\StudentsSalesBundle\Domain\UseCases\Commands\Customers\Create\Command as CreateCustomerCommand;
 use alexinbox80\StudentsSalesBundle\Domain\UseCases\Commands\Customers\Create\Handler as CreateCustomerHandler;
+use alexinbox80\StudentsSalesBundle\Domain\UseCases\Commands\Customers\Update\Command as UpdateCustomerCommand;
+use alexinbox80\StudentsSalesBundle\Domain\UseCases\Commands\Customers\Update\Handler as UpdateCustomerHandler;
+use alexinbox80\StudentsSalesBundle\Domain\UseCases\Commands\Customers\Delete\Command as DeleteCustomerCommand;
+use alexinbox80\StudentsSalesBundle\Domain\UseCases\Commands\Customers\Delete\Handler as DeleteCustomerHandler;
 use alexinbox80\StudentsSalesBundle\Domain\UseCases\Queries\Invoices\GeneratePaymentLink\Fetcher as GeneratePaymentLinkFetcher;
 use alexinbox80\StudentsSalesBundle\Domain\UseCases\Queries\Invoices\GeneratePaymentLink\Query as GeneratePaymentLinkQuery;
 use DateTimeImmutable;
@@ -69,15 +73,15 @@ final readonly class Sales implements SalesInterface, ServiceSubscriberInterface
         }
     }
 
-    public function customer(
-        string $studentId,
+    public function createCustomer(
+        string $customerId,
         string $firstName,
         string $lastName,
         string $email,
     ): string
     {
         $command = new CreateCustomerCommand(
-            customerId: OId::fromString($studentId),
+            customerId: OId::fromString($customerId),
             name: new Name($firstName, $lastName),
             email: new Email($email)
         );
@@ -93,12 +97,60 @@ final readonly class Sales implements SalesInterface, ServiceSubscriberInterface
 
         return $customerId;
     }
+
+    public function updateCustomer(
+        string $customerId,
+        string $firstName,
+        string $lastName,
+        string $email,
+    ): string
+    {
+        $command = new UpdateCustomerCommand(
+            customerId: OId::fromString($customerId),
+            name: new Name($firstName, $lastName),
+            email: new Email($email)
+        );
+
+        $handler = $this->service(UpdateCustomerHandler::class);
+
+        try {
+            $customerId = $handler->handle($command);
+        } catch (Throwable $e) {
+            // TODO Convert exception to contract
+            throw $e;
+        }
+
+        return $customerId;
+    }
+
+    public function deleteCustomer(
+        string $customerId,
+    ): string
+    {
+        $command = new DeleteCustomerCommand(
+            customerId: OId::fromString($customerId)
+        );
+
+        $handler = $this->service(DeleteCustomerHandler::class);
+
+        try {
+            $customerId = $handler->handle($command);
+        } catch (Throwable $e) {
+            // TODO Convert exception to contract
+            throw $e;
+        }
+
+        return $customerId;
+    }
+
     public static function getSubscribedServices(): array
     {
         return [
             CreateSubscriptionHandler::class => CreateSubscriptionHandler::class,
             GeneratePaymentLinkFetcher::class => GeneratePaymentLinkFetcher::class,
             CreateCustomerHandler::class => CreateCustomerHandler::class,
+            UpdateCustomerHandler::class => UpdateCustomerHandler::class,
+            DeleteCustomerHandler::class => DeleteCustomerHandler::class,
         ];
     }
 

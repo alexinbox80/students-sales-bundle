@@ -1,10 +1,9 @@
 <?php
 
-namespace alexinbox80\StudentsSalesBundle\Domain\UseCases\Commands\Customers\Create;
+namespace alexinbox80\StudentsSalesBundle\Domain\UseCases\Commands\Customers\Update;
 
 use alexinbox80\Shared\Domain\Model\Email;
 use alexinbox80\Shared\Domain\Model\Name;
-use alexinbox80\StudentsSalesBundle\Domain\Model\Customer;
 use alexinbox80\StudentsSalesBundle\Domain\Repositories\CustomersRepositoryInterface;
 use alexinbox80\Shared\Domain\EventDispatcherInterface;
 
@@ -18,15 +17,14 @@ final class Handler
 
     public function handle(Command $command): string
     {
-        //$customer = $this->customersRepository->get($command->customerId);
+        $customer = $this->customersRepository->get($command->customerId);
 
-        $customer = Customer::create(
-            $command->customerId,
+        $customer->update(
             new Name($command->name->getFirst(), $command->name->getLast()),
             new Email($command->email->toString())
         );
 
-        $this->customersRepository->add($customer);
+        $this->customersRepository->update();
 
         $this->dispatcher->dispatch(...$customer->releaseEvents());
 

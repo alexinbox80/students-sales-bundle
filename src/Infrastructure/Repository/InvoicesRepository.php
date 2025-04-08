@@ -34,7 +34,12 @@ class InvoicesRepository extends AbstractRepository implements InvoicesRepositor
 
     public function add(Invoice $invoice): void
     {
+        $this->store($invoice);
+    }
 
+    public function update(): void
+    {
+        $this->flush();
     }
 
     public function findLatestPendingInvoiceForSubscription(OId $subscriptionId): ?Invoice

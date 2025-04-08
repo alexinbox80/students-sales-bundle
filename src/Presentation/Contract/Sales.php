@@ -20,6 +20,10 @@ use alexinbox80\StudentsSalesBundle\Domain\UseCases\Commands\Products\Update\Com
 use alexinbox80\StudentsSalesBundle\Domain\UseCases\Commands\Products\Update\Handler as UpdateProductHandler;
 use alexinbox80\StudentsSalesBundle\Domain\UseCases\Commands\Products\Delete\Command as DeleteProductCommand;
 use alexinbox80\StudentsSalesBundle\Domain\UseCases\Commands\Products\Delete\Handler as DeleteProductHandler;
+use alexinbox80\StudentsSalesBundle\Domain\UseCases\Commands\Invoices\Create\Command as CreateInvoiceCommand;
+use alexinbox80\StudentsSalesBundle\Domain\UseCases\Commands\Invoices\Create\Handler as CreateInvoiceHandler;
+use alexinbox80\StudentsSalesBundle\Domain\UseCases\Commands\Invoices\Expire\Command as ExpireInvoiceCommand;
+use alexinbox80\StudentsSalesBundle\Domain\UseCases\Commands\Invoices\Expire\Handler as ExpireInvoiceHandler;
 use alexinbox80\StudentsSalesBundle\Domain\UseCases\Queries\Invoices\GeneratePaymentLink\Fetcher as GeneratePaymentLinkFetcher;
 use alexinbox80\StudentsSalesBundle\Domain\UseCases\Queries\Invoices\GeneratePaymentLink\Query as GeneratePaymentLinkQuery;
 use DateTimeImmutable;
@@ -227,6 +231,48 @@ final readonly class Sales implements SalesInterface, ServiceSubscriberInterface
         return $productId;
     }
 
+    public function createInvoice(
+        string $subscriptionId,
+        DateTimeImmutable $dueDate
+    ): string
+    {
+        $command = new CreateInvoiceCommand(
+            subscriptionId: OId::fromString($subscriptionId),
+            dueDate: $dueDate
+        );
+
+        $handler = $this->service(CreateInvoiceHandler::class);
+
+        try {
+            $invoiceId = $handler->handle($command);
+        } catch (Throwable $e) {
+            // TODO Convert exception to contract
+            throw $e;
+        }
+
+        return $invoiceId;
+    }
+
+    public function expireInvoice(
+        string $invoiceId
+    ): string
+    {
+        $command = new ExpireInvoiceCommand(
+            invoiceId: OId::fromString($invoiceId)
+        );
+
+        $handler = $this->service(ExpireInvoiceHandler::class);
+
+        try {
+            $expireId = $handler->handle($command);
+        } catch (Throwable $e) {
+            // TODO Convert exception to contract
+            throw $e;
+        }
+
+        return $expireId;
+    }
+
     public static function getSubscribedServices(): array
     {
         return [
@@ -238,6 +284,8 @@ final readonly class Sales implements SalesInterface, ServiceSubscriberInterface
             CreateProductHandler::class => CreateProductHandler::class,
             UpdateProductHandler::class => UpdateProductHandler::class,
             DeleteProductHandler::class => DeleteProductHandler::class,
+            CreateInvoiceHandler::class => CreateInvoiceHandler::class,
+            ExpireInvoiceHandler::class => ExpireInvoiceHandler::class,
         ];
     }
 

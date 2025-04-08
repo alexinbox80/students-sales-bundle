@@ -21,7 +21,7 @@ final class Handler
      * @throws NotFoundException
      * @throws InvoiceIsNotAwaitingPaymentException
      */
-    public function handle(Command $command): void
+    public function handle(Command $command): string
     {
         $invoice = $this->invoicesRepository->get($command->invoiceId);
 
@@ -30,5 +30,7 @@ final class Handler
         $this->flusher->flush();
 
         $this->dispatcher->dispatch(...$invoice->releaseEvents());
+
+        return $invoice->getId()->toString();
     }
 }

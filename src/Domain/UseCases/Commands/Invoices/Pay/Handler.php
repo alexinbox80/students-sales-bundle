@@ -12,7 +12,7 @@ final class Handler
 {
     public function __construct(
         private readonly InvoicesRepositoryInterface $invoicesRepository,
-        private readonly FlusherInterface $flusher,
+        //private readonly FlusherInterface $flusher,
         private readonly EventDispatcherInterface $dispatcher,
     ) {
     }
@@ -27,7 +27,8 @@ final class Handler
 
         $invoice->pay($command->transactionId);
 
-        $this->flusher->flush();
+        $this->invoicesRepository->update();
+        //$this->flusher->flush();
         $this->dispatcher->dispatch(...$invoice->releaseEvents());
     }
 }

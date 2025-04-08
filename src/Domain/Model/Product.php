@@ -52,6 +52,12 @@ class Product implements AggregateRootInterface, ModelInterface, HasMetaTimestam
         return new self(OId::next(), $name, $price);
     }
 
+    public function update(string $name, Price $price): void
+    {
+        $this->name = $name;
+        $this->price = $price;
+    }
+
     public function getId(): OId
     {
         return $this->id;

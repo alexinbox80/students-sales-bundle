@@ -50,4 +50,30 @@ interface SalesInterface
     public function deleteCustomer(
         string $customerId
     ): string;
+
+    /**
+     * @return string Product id
+     */
+    public function createProduct(
+        string $name,
+        string $amount,
+        string $currency,
+    ): string;
+
+    /**
+     * @return string Product id
+     */
+    public function updateProduct(
+        string $productId,
+        string $name,
+        string $amount,
+        string $currency,
+    ): string;
+
+    /**
+     * @return string Product id
+     */
+    public function deleteProduct(
+        string $productId
+    ): string;
 }

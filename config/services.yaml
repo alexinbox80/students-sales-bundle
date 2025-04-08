@@ -21,7 +21,7 @@ services:
     alexinbox80\StudentsSalesBundle\Tests\Mocks\Repositories\InMemorySubscriptionsRepository: ~
 
     alexinbox80\StudentsSalesBundle\Domain\Repositories\InvoicesRepositoryInterface: '@alexinbox80\StudentsSalesBundle\Tests\Mocks\Repositories\InMemoryInvoicesRepository'
-    alexinbox80\StudentsSalesBundle\Domain\Repositories\ProductsRepositoryInterface: '@alexinbox80\StudentsSalesBundle\Tests\Mocks\Repositories\InMemoryProductsRepository'
+#    alexinbox80\StudentsSalesBundle\Domain\Repositories\ProductsRepositoryInterface: '@alexinbox80\StudentsSalesBundle\Tests\Mocks\Repositories\InMemoryProductsRepository'
 #    alexinbox80\StudentsSalesBundle\Domain\Repositories\SubscriptionsRepositoryInterface: '@alexinbox80\StudentsSalesBundle\Tests\Mocks\Repositories\InMemorySubscriptionsRepository'
 
     alexinbox80\Shared\Tests\Mocks\FlusherSpy: ~
@@ -42,9 +42,9 @@ services:
 
 #    alexinbox80\StudentsSalesBundle\Infrastructure\Repository\InvoicesRepository: ~
 #    alexinbox80\StudentsSalesBundle\Domain\Repositories\InvoicesRepositoryInterface: '@alexinbox80\StudentsSalesBundle\Infrastructure\Repository\InvoicesRepository'
-#
-#    alexinbox80\StudentsSalesBundle\Infrastructure\Repository\ProductsRepository: ~
-#    alexinbox80\StudentsSalesBundle\Domain\Repositories\ProductsRepositoryInterface: '@alexinbox80\StudentsSalesBundle\Infrastructure\Repository\ProductsRepository'
+
+    alexinbox80\StudentsSalesBundle\Infrastructure\Repository\ProductsRepository: ~
+    alexinbox80\StudentsSalesBundle\Domain\Repositories\ProductsRepositoryInterface: '@alexinbox80\StudentsSalesBundle\Infrastructure\Repository\ProductsRepository'
 
     alexinbox80\StudentsSalesBundle\Infrastructure\Repository\SubscriptionsRepository: ~
     alexinbox80\StudentsSalesBundle\Domain\Repositories\SubscriptionsRepositoryInterface: '@alexinbox80\StudentsSalesBundle\Infrastructure\Repository\SubscriptionsRepository'

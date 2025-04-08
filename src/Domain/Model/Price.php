@@ -2,7 +2,6 @@
 
 namespace alexinbox80\StudentsSalesBundle\Domain\Model;
 
-use alexinbox80\StudentsSalesBundle\Domain\Model\Subscription\Status;
 use Doctrine\ORM\Mapping as ORM;
 use Webmozart\Assert\Assert;
 

@@ -4,6 +4,8 @@ namespace alexinbox80\StudentsSalesBundle\Presentation\Contract;
 
 use alexinbox80\Shared\Domain\Model\Email;
 use alexinbox80\Shared\Domain\Model\Name;
+use alexinbox80\StudentsSalesBundle\Domain\Model\Currency;
+use alexinbox80\StudentsSalesBundle\Domain\Model\Price;
 use alexinbox80\StudentsSalesBundle\Domain\UseCases\Commands\Subscriptions\Create\Command as CreateSubscriptionCommand;
 use alexinbox80\StudentsSalesBundle\Domain\UseCases\Commands\Subscriptions\Create\Handler as CreateSubscriptionHandler;
 use alexinbox80\StudentsSalesBundle\Domain\UseCases\Commands\Customers\Create\Command as CreateCustomerCommand;
@@ -12,6 +14,12 @@ use alexinbox80\StudentsSalesBundle\Domain\UseCases\Commands\Customers\Update\Co
 use alexinbox80\StudentsSalesBundle\Domain\UseCases\Commands\Customers\Update\Handler as UpdateCustomerHandler;
 use alexinbox80\StudentsSalesBundle\Domain\UseCases\Commands\Customers\Delete\Command as DeleteCustomerCommand;
 use alexinbox80\StudentsSalesBundle\Domain\UseCases\Commands\Customers\Delete\Handler as DeleteCustomerHandler;
+use alexinbox80\StudentsSalesBundle\Domain\UseCases\Commands\Products\Create\Command as CreateProductCommand;
+use alexinbox80\StudentsSalesBundle\Domain\UseCases\Commands\Products\Create\Handler as CreateProductHandler;
+use alexinbox80\StudentsSalesBundle\Domain\UseCases\Commands\Products\Update\Command as UpdateProductCommand;
+use alexinbox80\StudentsSalesBundle\Domain\UseCases\Commands\Products\Update\Handler as UpdateProductHandler;
+use alexinbox80\StudentsSalesBundle\Domain\UseCases\Commands\Products\Delete\Command as DeleteProductCommand;
+use alexinbox80\StudentsSalesBundle\Domain\UseCases\Commands\Products\Delete\Handler as DeleteProductHandler;
 use alexinbox80\StudentsSalesBundle\Domain\UseCases\Queries\Invoices\GeneratePaymentLink\Fetcher as GeneratePaymentLinkFetcher;
 use alexinbox80\StudentsSalesBundle\Domain\UseCases\Queries\Invoices\GeneratePaymentLink\Query as GeneratePaymentLinkQuery;
 use DateTimeImmutable;
@@ -143,6 +151,82 @@ final readonly class Sales implements SalesInterface, ServiceSubscriberInterface
         return $customerId;
     }
 
+    public function createProduct(
+        string $name,
+        string $amount,
+        string $currency,
+    ): string
+    {
+        if ($currency === 'usd') $currency = Currency::USD;
+            elseif ($currency === 'eur') $currency = Currency::EUR;
+                else $currency = Currency::RUR;
+
+        $command = new CreateProductCommand(
+            name: $name,
+            price: new Price($amount, $currency)
+        );
+
+        $handler = $this->service(CreateProductHandler::class);
+
+        try {
+            $productId = $handler->handle($command);
+        } catch (Throwable $e) {
+            // TODO Convert exception to contract
+            throw $e;
+        }
+
+        return $productId;
+    }
+
+    public function updateProduct(
+        string $productId,
+        string $name,
+        string $amount,
+        string $currency
+    ): string
+    {
+        if ($currency === 'usd') $currency = Currency::USD;
+            elseif ($currency === 'eur') $currency = Currency::EUR;
+                else $currency = Currency::RUR;
+
+        $command = new UpdateProductCommand(
+            productId: OId::fromString($productId),
+            name: $name,
+            price: new Price($amount, $currency)
+        );
+
+        $handler = $this->service(UpdateProductHandler::class);
+
+        try {
+            $productId = $handler->handle($command);
+        } catch (Throwable $e) {
+            // TODO Convert exception to contract
+            throw $e;
+        }
+
+        return $productId;
+    }
+
+    public function deleteProduct(
+        string $productId
+    ): string
+    {
+        $command = new DeleteProductCommand(
+            productId: OId::fromString($productId)
+        );
+
+        $handler = $this->service(DeleteProductHandler::class);
+
+        try {
+            $productId = $handler->handle($command);
+        } catch (Throwable $e) {
+            // TODO Convert exception to contract
+            throw $e;
+        }
+
+        return $productId;
+    }
+
     public static function getSubscribedServices(): array
     {
         return [
@@ -151,6 +235,9 @@ final readonly class Sales implements SalesInterface, ServiceSubscriberInterface
             CreateCustomerHandler::class => CreateCustomerHandler::class,
             UpdateCustomerHandler::class => UpdateCustomerHandler::class,
             DeleteCustomerHandler::class => DeleteCustomerHandler::class,
+            CreateProductHandler::class => CreateProductHandler::class,
+            UpdateProductHandler::class => UpdateProductHandler::class,
+            DeleteProductHandler::class => DeleteProductHandler::class,
         ];
     }
 

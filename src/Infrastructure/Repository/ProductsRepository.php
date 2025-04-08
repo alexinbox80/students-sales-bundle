@@ -34,6 +34,17 @@ class ProductsRepository extends AbstractRepository implements ProductsRepositor
 
     public function add(Product $product): void
     {
+        $this->store($product);
+    }
 
+    public function update(): void
+    {
+        $this->flush();
+    }
+
+    public function remove(Product $product): void
+    {
+        $product->setDeletedAt();
+        $this->flush();
     }
 }

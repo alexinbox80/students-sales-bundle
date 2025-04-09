@@ -3,6 +3,8 @@
 2. php bin/console doctrine:migrations:diff
 3. php bin/console doctrine:migrations:migrate
 
+Below is an example of using the Sales object methods via the SalesInterface:
+
 ```php
     use alexinbox80\StudentsSalesBundle\Presentation\Contract\SalesInterface;
 

@@ -12,7 +12,7 @@ final class Handler
 {
     public function __construct(
         private readonly InvoicesRepositoryInterface $invoicesRepository,
-        private readonly FlusherInterface $flusher,
+    //    private readonly FlusherInterface $flusher,
         private readonly EventDispatcherInterface $dispatcher,
     ) {
     }
@@ -21,16 +21,16 @@ final class Handler
      * @throws NotFoundException
      * @throws InvoiceIsNotAwaitingPaymentException
      */
-    public function handle(Command $command): string
+    public function handle(Command $command): void
     {
         $invoice = $this->invoicesRepository->get($command->invoiceId);
 
         $invoice->expire();
 
-        $this->flusher->flush();
+        $this->invoicesRepository->update();
+
+        //$this->flusher->flush();
 
         $this->dispatcher->dispatch(...$invoice->releaseEvents());
-
-        return $invoice->getId()->toString();
     }
 }

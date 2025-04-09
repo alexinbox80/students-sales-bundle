@@ -44,6 +44,26 @@ class InvoicesRepository extends AbstractRepository implements InvoicesRepositor
 
     public function findLatestPendingInvoiceForSubscription(OId $subscriptionId): ?Invoice
     {
-        return null;
+        $invoices = $this->entityManager->getRepository(Invoice::class)->findBy(['subscriptionId' => $subscriptionId]);
+
+        $latestInvoice = null;
+        $latestDate = null;
+
+        foreach ($invoices as $invoice) {
+            if (!$invoice->getSubscriptionId()->isEqual($subscriptionId)) {
+                continue;
+            }
+
+            if ($invoice->isPaid() || $invoice->isExpired()) {
+                continue;
+            }
+
+            if ($latestDate === null || $invoice->getCreatedAt() > $latestDate) {
+                $latestInvoice = $invoice;
+                $latestDate = $invoice->getCreatedAt();
+            }
+        }
+
+        return $latestInvoice;
     }
 }

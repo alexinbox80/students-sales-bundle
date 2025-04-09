@@ -2,6 +2,7 @@
 
 namespace alexinbox80\StudentsSalesBundle\Tests\Unit\Domain\Model;
 
+use alexinbox80\Shared\Domain\Model\OId;
 use alexinbox80\StudentsSalesBundle\Domain\Model\Customer;
 use alexinbox80\Shared\Domain\Model\Email;
 use alexinbox80\Shared\Domain\Model\Name;
@@ -11,15 +12,17 @@ use PHPUnit\Framework\TestCase;
 #[CoversClass(Customer::class)]
 class CustomerTest extends TestCase
 {
+    private Oid $id;
     private Customer $customer;
     private Name $name;
     private Email $email;
 
     protected function setUp(): void
     {
+        $this->id = Oid::next();
         $this->name = new Name('John', 'Doe');
         $this->email = new Email('john.doe@example.com');
-        $this->customer = Customer::create($this->name, $this->email);
+        $this->customer = Customer::create($this->id, $this->name, $this->email);
     }
 
     public function testCreateCustomerGeneratesId(): void

@@ -255,7 +255,7 @@ final readonly class Sales implements SalesInterface, ServiceSubscriberInterface
 
     public function expireInvoice(
         string $invoiceId
-    ): string
+    ): void
     {
         $command = new ExpireInvoiceCommand(
             invoiceId: OId::fromString($invoiceId)
@@ -264,13 +264,11 @@ final readonly class Sales implements SalesInterface, ServiceSubscriberInterface
         $handler = $this->service(ExpireInvoiceHandler::class);
 
         try {
-            $expireId = $handler->handle($command);
+            $handler->handle($command);
         } catch (Throwable $e) {
             // TODO Convert exception to contract
             throw $e;
         }
-
-        return $expireId;
     }
 
     public static function getSubscribedServices(): array

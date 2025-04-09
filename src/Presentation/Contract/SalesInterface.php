@@ -91,5 +91,5 @@ interface SalesInterface
      */
     public function expireInvoice(
         string $invoiceId
-    ): string;
+    ): void;
 }

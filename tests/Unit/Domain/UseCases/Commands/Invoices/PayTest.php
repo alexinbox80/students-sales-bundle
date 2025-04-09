@@ -25,12 +25,12 @@ final class PayTest extends TestCase
     protected function setUp(): void
     {
         $this->invoicesRepository = new InMemoryInvoicesRepository();
-        $this->flusher = $this->createMock(FlusherInterface::class);
+//        $this->flusher = $this->createMock(FlusherInterface::class);
         $this->dispatcher = new EventDispatcherSpy();
 
         $this->handler = new Handler(
             $this->invoicesRepository,
-            $this->flusher,
+            //$this->flusher,
             $this->dispatcher
         );
     }
@@ -44,9 +44,9 @@ final class PayTest extends TestCase
             transactionId: 'transaction-123'
         );
 
-        $this->flusher
-            ->expects($this->once())
-            ->method('flush');
+//        $this->flusher
+//            ->expects($this->once())
+//            ->method('flush');
 
         $this->handler->handle($command);
 

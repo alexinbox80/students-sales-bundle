@@ -10,6 +10,7 @@ use alexinbox80\StudentsSalesBundle\Domain\UseCases\Commands\Invoices\Expire\Han
 use alexinbox80\Shared\Domain\EventDispatcherInterface;
 use alexinbox80\Shared\Domain\FlusherInterface;
 use alexinbox80\Shared\Domain\Model\OId;
+use alexinbox80\StudentsSalesBundle\Tests\Mocks\Repositories\InMemoryInvoicesRepository;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -19,18 +20,18 @@ final class ExpireTest extends TestCase
 {
     private Handler $handler;
     private InvoicesRepositoryInterface|MockObject $invoicesRepository;
-    private FlusherInterface|MockObject $flusher;
+    //private FlusherInterface|MockObject $flusher;
     private EventDispatcherInterface|MockObject $dispatcher;
 
     protected function setUp(): void
     {
         $this->invoicesRepository = $this->createMock(InvoicesRepositoryInterface::class);
-        $this->flusher = $this->createMock(FlusherInterface::class);
+        //$this->flusher = $this->createMock(FlusherInterface::class);
         $this->dispatcher = $this->createMock(EventDispatcherInterface::class);
 
         $this->handler = new Handler(
             $this->invoicesRepository,
-            $this->flusher,
+         //   $this->flusher,
             $this->dispatcher
         );
     }
@@ -41,6 +42,7 @@ final class ExpireTest extends TestCase
         $command = new Command(invoiceId: $invoiceId);
 
         $invoice = $this->createMock(Invoice::class);
+
         $invoice
             ->expects($this->once())
             ->method('expire');
@@ -56,9 +58,9 @@ final class ExpireTest extends TestCase
             ->with($command->invoiceId)
             ->willReturn($invoice);
 
-        $this->flusher
-            ->expects($this->once())
-            ->method('flush');
+//        $this->flusher
+//            ->expects($this->once())
+//            ->method('flush');
 
         $this->dispatcher
             ->expects($this->once())

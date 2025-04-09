@@ -1,0 +1,33 @@
+<doctrine-mapping
+        xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                        https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd"
+>
+    <entity name="alexinbox80\StudentsSalesBundle\Domain\Model\Product" table="products">
+        <id name="id" type="shared__oid">
+            <generator strategy="AUTO" />
+        </id>
+
+        <field name="name" type="string" length="255" nullable="false" unique="true" />
+        <embedded name="price" class="alexinbox80\StudentsSalesBundle\Domain\Model\Price" column-prefix="price_" />
+
+        <field name="createdAt" type="datetime" nullable="false" />
+        <field name="updatedAt" type="datetime" nullable="false" />
+        <field name="deletedAt" type="datetime" nullable="true" />
+
+        <unique-constraints>
+            <unique-constraint name="product__name__uniq" columns="name">
+                <options>
+                    <option name="where">(deleted_at IS NULL)</option>
+                </options>
+            </unique-constraint>
+        </unique-constraints>
+
+        <lifecycle-callbacks>
+            <lifecycle-callback type="prePersist" method="setCreatedAt"/>
+            <lifecycle-callback type="prePersist" method="setUpdatedAt"/>
+            <lifecycle-callback type="preUpdate" method="setUpdatedAt"/>
+        </lifecycle-callbacks>
+    </entity>
+</doctrine-mapping>

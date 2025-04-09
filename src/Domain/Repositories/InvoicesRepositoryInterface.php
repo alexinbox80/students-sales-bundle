@@ -17,5 +17,7 @@ interface InvoicesRepositoryInterface
 
     public function add(Invoice $invoice): void;
 
+    public function update(): void;
+
     public function findLatestPendingInvoiceForSubscription(OId $subscriptionId): ?Invoice;
 }

@@ -67,6 +67,11 @@ final class InMemoryInvoicesRepository implements InvoicesRepositoryInterface
         $this->storage[] = $invoice;
     }
 
+    public function update(): void
+    {
+
+    }
+
     public function findLatestPendingInvoiceForSubscription(OId $subscriptionId): ?Invoice
     {
         $latestInvoice = null;

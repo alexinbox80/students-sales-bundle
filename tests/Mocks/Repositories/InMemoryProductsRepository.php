@@ -40,4 +40,24 @@ final class InMemoryProductsRepository implements ProductsRepositoryInterface
 
         throw new NotFoundException();
     }
+
+    public function find(OId $id): ?Product
+    {
+        return null;
+    }
+
+    public function add(Product $product): void
+    {
+
+    }
+
+    public function update(): void
+    {
+
+    }
+
+    public function remove(Product $product): void
+    {
+
+    }
 }

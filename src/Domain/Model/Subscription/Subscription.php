@@ -2,6 +2,9 @@
 
 namespace alexinbox80\StudentsSalesBundle\Domain\Model\Subscription;
 
+use alexinbox80\Shared\Domain\Events\EventsTrait;
+use alexinbox80\Shared\Domain\Model\AggregateRootInterface;
+use alexinbox80\Shared\Domain\Model\OId;
 use alexinbox80\StudentsSalesBundle\Domain\Events\SubscriptionActivatedEvent;
 use alexinbox80\StudentsSalesBundle\Domain\Events\SubscriptionCancelledEvent;
 use alexinbox80\StudentsSalesBundle\Domain\Events\SubscriptionCreatedEvent;
@@ -10,10 +13,14 @@ use alexinbox80\StudentsSalesBundle\Domain\Events\SubscriptionRenewedEvent;
 use alexinbox80\StudentsSalesBundle\Domain\Exceptions\SubscriptionIsNotActiveException;
 use alexinbox80\StudentsSalesBundle\Domain\Exceptions\SubscriptionIsNotPendingException;
 use alexinbox80\StudentsSalesBundle\Domain\Exceptions\SubscriptionIsNotReadyForRenewalException;
+use alexinbox80\StudentsSalesBundle\Domain\Model\Interfaces\ModelInterface;
+use alexinbox80\StudentsSalesBundle\Domain\Model\Interfaces\SoftDeletableInterface;
+use alexinbox80\StudentsSalesBundle\Domain\Model\Interfaces\HasMetaTimestampsInterface;
 use alexinbox80\StudentsSalesBundle\Domain\Model\Price;
-use alexinbox80\Shared\Domain\Events\EventsTrait;
-use alexinbox80\Shared\Domain\Model\AggregateRootInterface;
-use alexinbox80\Shared\Domain\Model\OId;
+use alexinbox80\StudentsSalesBundle\Domain\Model\Traits\CreatedAtTrait;
+use alexinbox80\StudentsSalesBundle\Domain\Model\Traits\DeletedAtTrait;
+use alexinbox80\StudentsSalesBundle\Domain\Model\Traits\UpdatedAtTrait;
+use Doctrine\ORM\Mapping as ORM;
 use DateTimeImmutable;
 use DomainException;
 
@@ -23,19 +30,52 @@ use DomainException;
  * Обратите внимание, что все ссылки на другие агрегаты - это их идентификаторы, а не объекты.
  * У этого агрегата есть методы мутаторы с бизнес логикой.
  */
-class Subscription implements AggregateRootInterface
+#[ORM\Table(name: 'subscriptions')]
+#[ORM\Entity]
+#[ORM\HasLifecycleCallbacks]
+class Subscription implements AggregateRootInterface, ModelInterface, HasMetaTimestampsInterface, SoftDeletableInterface
 {
+    use CreatedAtTrait, UpdatedAtTrait, DeletedAtTrait;
     use EventsTrait;
 
+    #[ORM\Id]
+    #[ORM\Column(type: 'shared__oid', unique: true)]
+    private OId $id;
+
+    #[ORM\Column(type: 'shared__oid')]
+    private OId $customerId;
+
+    #[ORM\Column(type: 'shared__oid')]
+    private OId $productId;
+
+    #[ORM\Embedded(class: Price::class, columnPrefix: false)]
+    private Price $price;
+
+    #[ORM\Column(type: 'string', enumType: Status::class)]
+    private Status $status;
+
+    #[ORM\Column(type: 'datetime_immutable')]
+    private DateTimeImmutable $startDate;
+
+    #[ORM\Column(type: 'datetime_immutable', nullable: true)]
+    private ?DateTimeImmutable $endDate = null;
+
     public function __construct(
-        private OId $id,
-        private OId $customerId,
-        private OId $productId,
-        private Price $price,
-        private Status $status,
-        private DateTimeImmutable $startDate,
-        private ?DateTimeImmutable $endDate = null
+        OId $id,
+        OId $customerId,
+        OId $productId,
+        Price $price,
+        Status $status,
+        DateTimeImmutable $startDate,
+        ?DateTimeImmutable $endDate = null
     ) {
+        $this->id = $id;
+        $this->customerId = $customerId;
+        $this->productId = $productId;
+        $this->price = $price;
+        $this->status = $status;
+        $this->startDate = $startDate;
+        $this->endDate = $endDate;
     }
 
     public static function create(

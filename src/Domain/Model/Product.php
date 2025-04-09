@@ -5,6 +5,13 @@ namespace alexinbox80\StudentsSalesBundle\Domain\Model;
 use alexinbox80\Shared\Domain\Events\EventsTrait;
 use alexinbox80\Shared\Domain\Model\AggregateRootInterface;
 use alexinbox80\Shared\Domain\Model\OId;
+use alexinbox80\StudentsSalesBundle\Domain\Model\Interfaces\HasMetaTimestampsInterface;
+use alexinbox80\StudentsSalesBundle\Domain\Model\Interfaces\ModelInterface;
+use alexinbox80\StudentsSalesBundle\Domain\Model\Interfaces\SoftDeletableInterface;
+use alexinbox80\StudentsSalesBundle\Domain\Model\Traits\CreatedAtTrait;
+use alexinbox80\StudentsSalesBundle\Domain\Model\Traits\DeletedAtTrait;
+use alexinbox80\StudentsSalesBundle\Domain\Model\Traits\UpdatedAtTrait;
+use Doctrine\ORM\Mapping as ORM;
 use Webmozart\Assert\Assert;
 
 /**
@@ -12,12 +19,23 @@ use Webmozart\Assert\Assert;
  * Продукт на который подписывается пользователь.
  * Не важен в контексте примера.
  */
-class Product implements AggregateRootInterface
+#[ORM\Entity]
+#[ORM\Table(name: 'products')]
+#[ORM\HasLifecycleCallbacks]
+#[ORM\UniqueConstraint(name: 'product__name__uniq', fields: ['name'], options: ['where' => '(deleted_at IS NULL)'])]
+class Product implements AggregateRootInterface, ModelInterface, HasMetaTimestampsInterface, SoftDeletableInterface
 {
+    use CreatedAtTrait, UpdatedAtTrait, DeletedAtTrait;
     use EventsTrait;
 
+    #[ORM\Id]
+    #[ORM\Column(type: 'shared__oid', unique: true)]
     private OId $id;
+
+    #[ORM\Column(type:'string', length: 255, unique: true, nullable: false)]
     private string $name;
+
+    #[ORM\Embedded(class: Price::class, columnPrefix: false)]
     private Price $price;
 
     public function __construct(OId $id, string $name, Price $price)
@@ -32,6 +50,12 @@ class Product implements AggregateRootInterface
     public static function create(string $name, Price $price): self
     {
         return new self(OId::next(), $name, $price);
+    }
+
+    public function update(string $name, Price $price): void
+    {
+        $this->name = $name;
+        $this->price = $price;
     }
 
     public function getId(): OId

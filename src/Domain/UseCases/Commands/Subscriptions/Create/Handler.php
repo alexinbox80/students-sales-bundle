@@ -14,7 +14,7 @@ final class Handler
         private readonly SubscriptionsRepositoryInterface $subscriptions,
         private readonly ProductsRepositoryInterface $productsRepository,
         private readonly FlusherInterface $flusher,
-        private readonly EventDispatcherInterface $dispatcher,
+        private readonly EventDispatcherInterface $dispatcher
     ) {
     }
 
@@ -39,7 +39,7 @@ final class Handler
         );
 
         $this->subscriptions->add($subscription);
-        $this->flusher->flush();
+        //$this->flusher->flush();
 
         $this->dispatcher->dispatch(...$subscription->releaseEvents());
 

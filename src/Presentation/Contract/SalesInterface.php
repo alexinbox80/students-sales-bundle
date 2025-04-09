@@ -2,6 +2,7 @@
 
 namespace alexinbox80\StudentsSalesBundle\Presentation\Contract;
 
+use alexinbox80\Shared\Domain\Model\OId;
 use DateTimeImmutable;
 
 /**
@@ -23,4 +24,72 @@ interface SalesInterface
     ): string;
 
     public function generatePaymentLink(string $subscriptionId): string;
+
+    /**
+     * @return string Customer id
+     */
+    public function createCustomer(
+        string $customerId,
+        string $firstName,
+        string $lastName,
+        string $email,
+    ): string;
+
+    /**
+     * @return string Customer id
+     */
+    public function updateCustomer(
+        string $customerId,
+        string $firstName,
+        string $lastName,
+        string $email,
+    ): string;
+
+    /**
+     * @return string Customer id
+     */
+    public function deleteCustomer(
+        string $customerId
+    ): string;
+
+    /**
+     * @return string Product id
+     */
+    public function createProduct(
+        string $name,
+        string $amount,
+        string $currency,
+    ): string;
+
+    /**
+     * @return string Product id
+     */
+    public function updateProduct(
+        string $productId,
+        string $name,
+        string $amount,
+        string $currency,
+    ): string;
+
+    /**
+     * @return string Product id
+     */
+    public function deleteProduct(
+        string $productId
+    ): string;
+
+    /**
+     * @return string Invoice id
+     */
+    public function createInvoice(
+        string $subscriptionId,
+        DateTimeImmutable $dueDate
+    ): string;
+
+    /**
+     * @return string Invoice id
+     */
+    public function expireInvoice(
+        string $invoiceId
+    ): void;
 }

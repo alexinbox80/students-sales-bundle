@@ -18,7 +18,7 @@ final class Handler
     ) {
     }
 
-    public function handle(Command $command): void
+    public function handle(Command $command): string
     {
         $subscription = $this->subscriptionsRepository->get($command->subscriptionId);
 
@@ -34,5 +34,7 @@ final class Handler
         $this->flusher->flush();
 
         $this->dispatcher->dispatch(...$invoice->releaseEvents());
+
+        return $invoice->getId()->toString();
     }
 }
